@@ -15,7 +15,7 @@ public class Sample extends AbstractVerticle {
 	}
 
 	@Override
-	public void start() throws Exception {
+	public void start() {
 		method1();
 		method2();
 	}
