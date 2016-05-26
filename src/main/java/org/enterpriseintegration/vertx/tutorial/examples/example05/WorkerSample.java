@@ -15,6 +15,7 @@ public class WorkerSample extends AbstractVerticle {
 
 	public static void main(String[] args) {
 		Vertx vertx = Vertx.vertx();
+
 		vertx.deployVerticle("org.enterpriseintegration.vertx.tutorial.examples.example05.WorkerSample",
 				// Instantiate a DeploymentOptions by setting an explicit number
 				// of instances and enabling worker code

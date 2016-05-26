@@ -13,6 +13,7 @@ public class MultiThreadedWorkerSample extends AbstractVerticle {
 
 	public static void main(String[] args) {
 		Vertx vertx = Vertx.vertx();
+		
 		vertx.deployVerticle("org.enterpriseintegration.vertx.tutorial.examples.example05.MultiThreadedWorkerSample",
 				// Instantiate a DeploymentOptions by setting an explicit number
 				// of instances and enabling worker code, multiThreaded mode but

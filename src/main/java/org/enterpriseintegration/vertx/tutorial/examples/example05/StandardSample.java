@@ -5,6 +5,7 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.json.JsonObject;
 
 /**
  * Example 05 - Standard: Deploy a standard verticle
@@ -15,10 +16,14 @@ public class StandardSample extends AbstractVerticle {
 
 	public static void main(String[] args) {
 		Vertx vertx = Vertx.vertx();
+		
+		//Create a custom configuration from a JsonObject
+		JsonObject config = new JsonObject().put("sleep", 3000);
+		
 		vertx.deployVerticle("org.enterpriseintegration.vertx.tutorial.examples.example05.StandardSample",
 				// Instantiate a DeploymentOptions by setting an explicit number
-				// of instances
-				new DeploymentOptions().setInstances(instances), res -> {
+				// of instances and referencing a JSON configuration
+				new DeploymentOptions().setInstances(instances).setConfig(config), res -> {
 					if (res.succeeded()) {
 						System.out.println("Standard verticle deployed");
 
@@ -37,13 +42,16 @@ public class StandardSample extends AbstractVerticle {
 	public void start(Future<Void> startFuture) {
 		System.out.println("Creating an instance with PID " + Thread.currentThread().getId());
 
+		//Retrieving the configuration initialized by the deployer
+		int sleep = config().getInteger("sleep");
+		
 		EventBus eventBus = vertx.eventBus();
 
 		// Consume messages on the event bus
 		eventBus.consumer("event", message -> {
 			System.out.println("PID " + Thread.currentThread().getId() + " received " + message.body());
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(sleep);
 			} catch (Exception e) {
 			}
 		});
