@@ -1,4 +1,6 @@
-package org.enterpriseintegration.vertx.tutorial.examples;
+package org.enterpriseintegration.vertx.tutorial.examples.example01;
+
+import org.enterpriseintegration.vertx.tutorial.examples.ExampleUtil;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
@@ -11,10 +13,10 @@ import io.vertx.ext.web.Router;
  * Example 01: Expose a basic REST resource using Vert.x router in parsing
  * header parameters
  */
-public class Example01 extends AbstractVerticle {
+public class Sample extends AbstractVerticle {
 
 	public static void main(String[] args) {
-		ExampleUtil.deployVerticle(new Example01());
+		ExampleUtil.deployVerticle("org.enterpriseintegration.vertx.tutorial.examples.example01.Sample");
 	}
 
 	// Start method

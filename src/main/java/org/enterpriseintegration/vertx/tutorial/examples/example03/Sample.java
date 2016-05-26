@@ -1,4 +1,6 @@
-package org.enterpriseintegration.vertx.tutorial.examples;
+package org.enterpriseintegration.vertx.tutorial.examples.example03;
+
+import org.enterpriseintegration.vertx.tutorial.examples.ExampleUtil;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
@@ -6,10 +8,10 @@ import io.vertx.core.Future;
 /**
  * Example 03: Describe how to orchestrate asynchronous executions
  */
-public class Example03 extends AbstractVerticle {
+public class Sample extends AbstractVerticle {
 
 	public static void main(String[] args) {
-		ExampleUtil.deployVerticle(new Example03());
+		ExampleUtil.deployVerticle("org.enterpriseintegration.vertx.tutorial.examples.example03.Sample");
 	}
 
 	@Override

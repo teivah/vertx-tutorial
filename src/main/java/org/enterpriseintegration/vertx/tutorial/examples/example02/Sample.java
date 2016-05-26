@@ -1,4 +1,6 @@
-package org.enterpriseintegration.vertx.tutorial.examples;
+package org.enterpriseintegration.vertx.tutorial.examples.example02;
+
+import org.enterpriseintegration.vertx.tutorial.examples.ExampleUtil;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
@@ -13,10 +15,10 @@ import io.vertx.ext.web.handler.BodyHandler;
  * Example 02: Create a POST method, retrieve a content sent in a JSON format,
  * execute a blocking code
  */
-public class Example02 extends AbstractVerticle {
+public class Sample extends AbstractVerticle {
 
 	public static void main(String[] args) {
-		ExampleUtil.deployVerticle(new Example02());
+		ExampleUtil.deployVerticle("org.enterpriseintegration.vertx.tutorial.examples.example02.Sample");
 	}
 
 	@Override

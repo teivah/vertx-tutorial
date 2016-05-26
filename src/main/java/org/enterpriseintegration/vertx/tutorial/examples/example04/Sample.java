@@ -1,4 +1,6 @@
-package org.enterpriseintegration.vertx.tutorial.examples;
+package org.enterpriseintegration.vertx.tutorial.examples.example04;
+
+import org.enterpriseintegration.vertx.tutorial.examples.ExampleUtil;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
@@ -10,17 +12,17 @@ import io.vertx.core.json.JsonObject;
 /**
  * Example 04: Basic pipe and filter example by exposing an Event Bus endpoint and sending an enriched message to another Event Bus endpoint 
  */
-public class Example04 extends AbstractVerticle {
+public class Sample extends AbstractVerticle {
 
 	public static void main(String[] args) {
-		Future<Vertx> deploymentFuture = ExampleUtil.deployVerticle(new Example04());
+		Future<Vertx> deploymentFuture = ExampleUtil.deployVerticle("org.enterpriseintegration.vertx.tutorial.examples.example04.Sample");
 		
 		//We need to send an endpoint once the verticle has been deployed so we create a custom handler on the deployment process
 		deploymentFuture.setHandler(handler -> {
 			EventBus eventBus = handler.result().eventBus();
 			
-			//Publish a message that will be managed by the verticle
-			eventBus.publish("customer.create", new JsonObject().put("name", "ben"));
+			//Send (one-to-one) a message that will be managed by the verticle
+			eventBus.send("customer.create", new JsonObject().put("name", "ben"));
 		});
 	}
 	
@@ -35,11 +37,10 @@ public class Example04 extends AbstractVerticle {
 		//Handle new messages on customer.create endpoint
 		createConsumer.handler(json -> {
 			System.out.println("Received new customer: " + json.body());
-			
 			//Enrich the customer object
 			JsonObject enrichedCustomer = enrichCustomer(json.body());
 			
-			//Publish the enriched message on another endpoint
+			//Publish (one-to-many) the enriched message on another endpoint
 			eventBus.publish("customer.completion", enrichedCustomer);
 		});
 		
