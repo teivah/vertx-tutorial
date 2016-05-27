@@ -4,6 +4,7 @@ import org.enterpriseintegration.vertx.tutorial.examples.ExampleUtil;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
+import io.vertx.core.buffer.Buffer;
 
 /**
  * Example 03: Describe how to orchestrate asynchronous executions
@@ -23,17 +24,17 @@ public class Sample extends AbstractVerticle {
 	// Most verbose but natural method using setHandler
 	private void method1() {
 		// Create first step
-		Future<String> future1 = doSmthg1();
+		Future<String> future1 = readFile();
 
 		// Set handler on future1
 		future1.setHandler(res1 -> {
 			if (res1.succeeded()) {
-				Future<String> future2 = doSmthg2(res1.result());
+				Future<String> future2 = writeFile(res1.result());
 
 				// Set handler on future 2
 				future2.setHandler(res2 -> {
 					if (res2.succeeded()) {
-						Future<String> future3 = doSmthg3(res2.result());
+						Future<String> future3 = copyFile(res2.result());
 
 						// Set handler on future 3
 						future3.setHandler(res3 -> {
@@ -56,15 +57,15 @@ public class Sample extends AbstractVerticle {
 	// Compose method using Future.compose(), possible from vertx-core 3.2.1
 	private void method2() {
 		// Create first step
-		Future<String> future1 = doSmthg1();
+		Future<String> future1 = readFile();
 
 		// Define future1 composition
 		future1.compose(s1 -> {
-			Future<String> future2 = doSmthg2(future1.result());
+			Future<String> future2 = writeFile(future1.result());
 
 			// Define future2 composition
 			future2.compose(s2 -> {
-				Future<String> future3 = doSmthg3(future2.result());
+				Future<String> future3 = copyFile(future2.result());
 
 				// Because the future3 is the last, we define here a handler
 				future3.setHandler(handler -> {
@@ -82,33 +83,62 @@ public class Sample extends AbstractVerticle {
 		}));
 	}
 
-	// Utility method 1
-	private Future<String> doSmthg1() {
+	// Read file method
+	private Future<String> readFile() {
 		Future<String> future = Future.future();
-
-		// Do something
-		future.complete("!");
-
+		
+		// Retrieve a FileSystem object from vertx instance and call the
+		// non-blocking readFile method
+		vertx.fileSystem().readFile("src/main/resources/example03/read.txt", handler -> {
+			if (handler.succeeded()) {
+				System.out.println("Read content: " + handler.result());
+				future.complete("read success");
+			} else {
+				System.err.println("Error while reading from file: " + handler.cause().getMessage());
+				future.fail(handler.cause());
+			}
+		});
+		
 		return future;
 	}
 
-	// Utility method 2
-	private Future<String> doSmthg2(String input) {
+	// Write file method
+	private Future<String> writeFile(String input) {
 		Future<String> future = Future.future();
-
-		// Do something
-		future.complete("world" + input);
-
+		
+		String file = "src/main/resources/example03/write.txt";
+		
+		// Retrieve a FileSystem object from vertx instance and call the
+		// non-blocking writeFile method
+		vertx.fileSystem().writeFile(file, Buffer.buffer(input), handler -> {
+			if (handler.succeeded()) {
+				System.out.println("File written with " + input);
+				future.complete(file);
+			} else {
+				System.err.println("Error while writing in file: " + handler.cause().getMessage());
+				
+			}
+		});
+		
 		return future;
 	}
 
-	// Utility method 3
-	private Future<String> doSmthg3(String input) {
+	// Write file method
+	private Future<String> copyFile(String input) {
 		Future<String> future = Future.future();
-
-		// Do something
-		future.complete("Hello " + input);
-
+		
+		// Retrieve a FileSystem object from vertx instance and call the
+		// non-blocking writeFile method
+		vertx.fileSystem().copy(input, "src/main/resources/example03/writecopy.txt", handler -> {
+			if (handler.succeeded()) {
+				System.out.println("Copy done of " + input);
+				future.complete("Copy success");
+			} else {
+				System.err.println("Error while copying a file: " + handler.cause().getMessage());
+				future.fail(handler.cause());
+			}
+		});
+		
 		return future;
 	}
 }
