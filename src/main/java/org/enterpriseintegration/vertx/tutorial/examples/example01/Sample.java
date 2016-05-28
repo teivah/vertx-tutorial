@@ -25,8 +25,7 @@ public class Sample extends AbstractVerticle {
 		// Create a router object allowing to route HTTP request
 		final Router router = Router.router(vertx);
 
-		// Create a new get method listening on /hello resource with a name
-		// parameter
+		// Create a new get method listening on /hello resource with a parameter
 		router.route(HttpMethod.GET, "/hello/:name").handler(routingContext -> {
 			// Retrieving request and response objects
 			HttpServerRequest request = routingContext.request();
@@ -62,5 +61,4 @@ public class Sample extends AbstractVerticle {
 		// Do something
 		stopFuture.complete();
 	}
-
 }

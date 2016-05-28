@@ -21,7 +21,7 @@ public class Sample extends AbstractVerticle {
 		method2();
 	}
 
-	// Most verbose but natural method using setHandler
+	// Orchestration based on setHandler
 	private void method1() {
 		// Create first step
 		Future<String> future1 = readFile();
@@ -54,7 +54,7 @@ public class Sample extends AbstractVerticle {
 		});
 	}
 
-	// Compose method using Future.compose(), possible from vertx-core 3.2.1
+	// Orchestration based on compose
 	private void method2() {
 		// Create first step
 		Future<String> future1 = readFile();
@@ -86,7 +86,7 @@ public class Sample extends AbstractVerticle {
 	// Read file method
 	private Future<String> readFile() {
 		Future<String> future = Future.future();
-		
+
 		// Retrieve a FileSystem object from vertx instance and call the
 		// non-blocking readFile method
 		vertx.fileSystem().readFile("src/main/resources/example03/read.txt", handler -> {
@@ -98,16 +98,16 @@ public class Sample extends AbstractVerticle {
 				future.fail(handler.cause());
 			}
 		});
-		
+
 		return future;
 	}
 
 	// Write file method
 	private Future<String> writeFile(String input) {
 		Future<String> future = Future.future();
-		
+
 		String file = "src/main/resources/example03/write.txt";
-		
+
 		// Retrieve a FileSystem object from vertx instance and call the
 		// non-blocking writeFile method
 		vertx.fileSystem().writeFile(file, Buffer.buffer(input), handler -> {
@@ -116,17 +116,17 @@ public class Sample extends AbstractVerticle {
 				future.complete(file);
 			} else {
 				System.err.println("Error while writing in file: " + handler.cause().getMessage());
-				
+
 			}
 		});
-		
+
 		return future;
 	}
 
 	// Write file method
 	private Future<String> copyFile(String input) {
 		Future<String> future = Future.future();
-		
+
 		// Retrieve a FileSystem object from vertx instance and call the
 		// non-blocking writeFile method
 		vertx.fileSystem().copy(input, "src/main/resources/example03/writecopy.txt", handler -> {
@@ -138,7 +138,7 @@ public class Sample extends AbstractVerticle {
 				future.fail(handler.cause());
 			}
 		});
-		
+
 		return future;
 	}
 }

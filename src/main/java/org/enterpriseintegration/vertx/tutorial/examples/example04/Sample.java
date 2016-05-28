@@ -32,7 +32,7 @@ public class Sample extends AbstractVerticle {
 		EventBus eventBus = vertx.eventBus();
 
 		//Create a EventBus consumer and instantiate a JsonObject type message consumer
-		MessageConsumer<JsonObject> createConsumer = vertx.eventBus().consumer("customer.create");
+		MessageConsumer<JsonObject> createConsumer = eventBus.consumer("customer.create");
 		
 		//Handle new messages on customer.create endpoint
 		createConsumer.handler(json -> {
