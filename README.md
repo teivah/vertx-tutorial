@@ -1,3 +1,3 @@
-#Vert.x tutorial
+# Vert.x tutorial
 
-[Vert.x: understanding core concepts](www.enterprise-integration.com/blog/vertx-understanding-core-concepts)
+[Vert.x: understanding core concepts](https://teivah.io/blog/vertx-understanding-core-concepts/)
